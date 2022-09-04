@@ -3,6 +3,6 @@
 
 #include "headers.h"
 
-void lscmd(char *list[50], int len);
-
+void lscmd(char *list[250], int len);
+void inpls(char *argumentList[250], int len);
 #endif

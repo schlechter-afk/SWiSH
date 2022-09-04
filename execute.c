@@ -33,6 +33,7 @@ void execute(char command[1000])
         {
             argumentList[len++] = argptr1;
             argptr1 = strtok_r(NULL, " \t\n", &saveptr_arg1);
+            // printf("Argument list comprises of %s %d\n", argumentList[len - 1], len);
         }
 
         // printf("### argptr2 is %s\n", argptr2);
@@ -70,8 +71,20 @@ void execute(char command[1000])
         // // printf("Reached here\n");
         // printf("# argptr2 is %s\n", argptr2);
 
+        // for (int i = 0; i < len; i++)
+        // {
+        //     printf("----> %s\n", argumentList[i]);
+        // }
+
         if (strcmp("cd", argumentList[0]) == 0)
         {
+            // char *addtohist = (char *)malloc(sizeof(char) * 200);
+            // addtohist[0] = '\0';
+            // for (int i = 0; i < len; i++)
+            // {
+            //     strcat(addtohist, argumentList[i]);
+            // }
+            // add_command_to_history(addtohist);
             if (len == 1)
             {
                 char *tempcurrentdirectory = malloc(sizeof(char) * 200);
@@ -86,34 +99,112 @@ void execute(char command[1000])
             else
             {
                 cdcmd(argumentList, len);
-                // if (chkempty)
-                // {
-                //     argptr2 = storeargptr2;
-                // }
+            }
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
             }
         }
 
         else if (strcmp("echo", argumentList[0]) == 0)
         {
+            // char *addtohist = (char *)malloc(sizeof(char) * 200);
+            // addtohist[0] = '\0';
+            // for (int i = 0; i < len; i++)
+            // {
+            //     strcat(addtohist, argumentList[i]);
+            // }
+            // add_command_to_history(addtohist);
             echocmd(argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
         }
 
         else if (strcmp("pwd", argumentList[0]) == 0)
         {
+            // char *addtohist = (char *)malloc(sizeof(char) * 200);
+            // addtohist[0] = '\0';
+            // for (int i = 0; i < len; i++)
+            // {
+            //     strcat(addtohist, argumentList[i]);
+            // }
+            // add_command_to_history(addtohist);
             pwdcmd();
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
         }
 
         else if (strcmp("clear", argumentList[0]) == 0)
         {
+            // char *addtohist = (char *)malloc(sizeof(char) * 200);
+            // addtohist[0] = '\0';
+            // for (int i = 0; i < len; i++)
+            // {
+            //     strcat(addtohist, argumentList[i]);
+            // }
+            // add_command_to_history(addtohist);
             printf("\e[1;1H\e[2J");
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
         }
         else if (strcmp("ls", argumentList[0]) == 0)
         {
-            lscmd(argumentList, len);
+            // char *addtohist = (char *)malloc(sizeof(char) * 200);
+            // addtohist[0] = '\0';
+            // for (int i = 0; i < len; i++)
+            // {
+            //     strcat(addtohist, argumentList[i]);
+            // }
+            // add_command_to_history(addtohist);
+            inpls(argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
+        else if (strcmp("history", argumentList[0]) == 0)
+        {
+            display_history();
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
+        else if (strcmp("pinfo", argumentList[0]) == 0)
+        {
+            pinfocmd(argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
+        else if (strcmp("discover", argumentList[0]) == 0)
+        {
+            char *currirect = malloc(sizeof(char) * 200);
+            getcwd(currirect, 2000);
+            executediscover(currirect, currirect, argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
+        else
+        {
+            fft = fgproc(argumentList, len);
         }
         if (chkempty)
         {
             argptr2 = storeargptr2;
+        }
+        for (int i = 0; i < len; i++)
+        {
+            argumentList[i][0] = '\0';
         }
     }
     return;

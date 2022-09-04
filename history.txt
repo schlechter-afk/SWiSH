@@ -1,0 +1,20 @@
+P°ä “à²ä “discover ./temp path.txt
+discovery . path.txt
+discover . path.txt
+discover . -f
+discover . -f path.txt
+clear
+discover . -d -f path.txt
+discover . -f path.txt
+clear
+discover ./temp path.txt
+discover .. -f path.txt
+discovery .. -f
+discover .. -f
+discover .. -f temp.py
+discover .. -f path.txt
+clear
+discover ..
+discover . -d
+clear
+discover . -d

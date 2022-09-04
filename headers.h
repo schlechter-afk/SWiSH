@@ -1,3 +1,5 @@
+#ifndef __headers_H
+#define __headers_H
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -20,3 +22,13 @@
 #include "globals.h"
 #include "execute.h"
 #include "ls.h"
+#include <grp.h>
+#include "history.h"
+#include "pinfo.h"
+#include "discovery.h"
+#include "fg.h"
+#include <time.h>
+
+int fft;
+
+#endif
