@@ -202,12 +202,39 @@ void lscmd(char *argumentList[250], int len)
     }
     else
     {
-        if (strcmp(argumentList[1], "-a") == 0)
+        if (argumentList[1][0] == '~')
+        {
+            struct dirent **list = NULL;
+            int count;
+
+            char *chktilda = (char *)malloc(sizeof(char *) * 200);
+            strcpy(chktilda, homedir);
+            strcat(chktilda, argumentList[1] + 1);
+            // printf("%s\n",chktilda);
+            if (access(chktilda, F_OK))
+            {
+                printf("No such file/directory\n");
+                return;
+            }
+
+            count = scandir(chktilda, &list, default_filter, alphasort);
+
+            if (count == -1)
+            {
+                printf("ls: cannot access the given input: No such file or directory");
+                return;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                printf("%s\n", list[i]->d_name);
+            }
+            return;
+        }
+        else if (strcmp(argumentList[1], "-a") == 0)
         {
             if (strcmp(argumentList[2], "-l") == 0 && len == 3)
             {
-                // printf("mai yaha aagaya\n");
-                // return;
                 struct dirent **list = NULL;
                 char *currdirft = (char *)malloc(sizeof(char) * 100);
                 getcwd(currdirft, 1000);
@@ -234,9 +261,21 @@ void lscmd(char *argumentList[250], int len)
             {
                 struct dirent **list = NULL;
                 char *currdirft = (char *)malloc(sizeof(char) * 100);
-                getcwd(currdirft, 1000);
-                strcat(currdirft, "/");
-                strcat(currdirft, argumentList[3]);
+                if (argumentList[3][0] != '/' && argumentList[3][0] != '~')
+                {
+                    getcwd(currdirft, 1000);
+                    strcat(currdirft, "/");
+                    strcat(currdirft, argumentList[3]);
+                }
+                else if (argumentList[3][0] == '~')
+                {
+                    strcpy(currdirft, homedir);
+                    strcat(currdirft, argumentList[3] + 1);
+                }
+                else
+                {
+                    strcpy(currdirft, argumentList[3]);
+                }
                 global = malloc(sizeof(char) * 250);
                 strcpy(global, currdirft);
 
@@ -263,9 +302,21 @@ void lscmd(char *argumentList[250], int len)
             {
                 struct dirent **list = NULL;
                 char *currdirft = (char *)malloc(sizeof(char) * 100);
-                getcwd(currdirft, 1000);
-                strcat(currdirft, "/");
-                strcat(currdirft, argumentList[2]);
+                if (argumentList[2][0] != '/' && argumentList[2][0] != '~')
+                {
+                    getcwd(currdirft, 1000);
+                    strcat(currdirft, "/");
+                    strcat(currdirft, argumentList[2]);
+                }
+                else if (argumentList[2][0] == '~')
+                {
+                    strcpy(currdirft, homedir);
+                    strcat(currdirft, argumentList[2] + 1);
+                }
+                else
+                {
+                    strcpy(currdirft, argumentList[2]);
+                }
 
                 if (access(currdirft, F_OK))
                 {
@@ -364,30 +415,6 @@ void lscmd(char *argumentList[250], int len)
             }
             return;
         }
-        else if (argumentList[1][0] == '~')
-        {
-            struct dirent **list = NULL;
-            int count;
-
-            char *chktilda = (char *)malloc(sizeof(char *) * 200);
-            strcpy(chktilda, homedir);
-            strcat(chktilda, argumentList[1] + 1);
-            // printf("%s\n",chktilda);
-
-            count = scandir(chktilda, &list, default_filter, alphasort);
-
-            if (count == -1)
-            {
-                printf("ls: cannot access the given input: No such file or directory");
-                return;
-            }
-
-            for (int i = 0; i < count; i++)
-            {
-                printf("%s\n", list[i]->d_name);
-            }
-            return;
-        }
         else if ((strcmp(argumentList[1], "-l") == 0) && len == 2)
         {
             struct dirent **list = NULL;
@@ -416,9 +443,21 @@ void lscmd(char *argumentList[250], int len)
         {
             struct dirent **list = NULL;
             char *currdirft = (char *)malloc(sizeof(char) * 100);
-            getcwd(currdirft, 1000);
-            strcat(currdirft, "/");
-            strcat(currdirft, argumentList[2]);
+            if (argumentList[2][0] != '/' && argumentList[2][0] != '~')
+            {
+                getcwd(currdirft, 1000);
+                strcat(currdirft, "/");
+                strcat(currdirft, argumentList[2]);
+            }
+            else if (argumentList[2][0] == '~')
+            {
+                strcpy(currdirft, homedir);
+                strcat(currdirft, argumentList[2] + 1);
+            }
+            else
+            {
+                strcpy(currdirft, argumentList[2]);
+            }
             global = malloc(sizeof(char) * 250);
             strcpy(global, currdirft);
             if (access(currdirft, F_OK))
@@ -517,7 +556,7 @@ void inpls(char *argumentList[250], int len)
         {
             arr[cmds] = malloc(sizeof(char) * 50);
             arr[cmds] = argumentList[i];
-            printf("arrcmds is %s\n", arr[cmds]);
+            // printf("arrcmds is %s\n", arr[cmds]);
             cmds++;
         }
     }
