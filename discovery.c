@@ -131,18 +131,6 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
                     strcpy(cmpdirec, argumentList[i]);
                 }
             }
-            // else if (argumentList[i][0] == '.' || argumentList[i][1] == '/' || argumentList[i][0] == '/')
-            // {
-            //     direcflag = 1;
-            //     cmpdirec = malloc(sizeof(char) * 200);
-            //     strcpy(cmpdirec, argumentList[i]);
-            // }
-            // else
-            // {
-            //     fileflag = 1;
-            //     cmpfile = malloc(sizeof(char) * 200);
-            //     strcpy(cmpfile, argumentList[i]);
-            // }
         }
     }
 
@@ -161,17 +149,18 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
 
     if (dotflag == 1)
     {
-        if (dminflag == 1 && direcflag == 0)
+        if (dminflag == 1 && direcflag == 0 && fminflag == 0)
         {
             discover(path, 0, 1, 1); // 0,1,0
+            return;
         }
-        else if (fminflag == 1 && direcflag == 0 && fileflag == 0)
+        else if (fminflag == 1 && direcflag == 0 && fileflag == 0 && dminflag == 0)
         {
             discover(path, 0, 1, 0); // 0,1,1
+            return;
         }
         else if (direcflag == 0 && fileflag == 1)
         {
-            // printf("her\n");
             char *currpath = malloc(sizeof(char) * 500);
             getcwd(currpath, 500);
             strcpy(path, currpath);
@@ -185,13 +174,13 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
         }
         else
         {
-            printf("idhar\n");
             discover(path, 0, 0, 0);
+            return;
         }
     }
     if (dotdotflag == 1)
     {
-        if (dminflag == 1 && direcflag == 0)
+        if (dminflag == 1 && direcflag == 0 && fminflag == 0)
         {
             chdir(path);
             char *currpath = malloc(sizeof(char) * 500);
@@ -205,7 +194,7 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
             chdir(currpath);
             return;
         }
-        else if (fminflag == 1 && direcflag == 0 && fileflag == 0)
+        else if (fminflag == 1 && direcflag == 0 && fileflag == 0 && dminflag == 0)
         {
             chdir(path);
             char *currpath = malloc(sizeof(char) * 500);
