@@ -118,13 +118,33 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
             }
             else
             {
-                if (direcflag == 1 || i == (len - 1))
+                // if (direcflag == 1 || i == (len - 1))
+                // {
+                //     fileflag = 1;
+                //     cmpfile = malloc(sizeof(char) * 200);
+                //     strcpy(cmpfile, argumentList[i]);
+                // }
+                // if (i != len - 1)
+                // {
+                //     direcflag = 1;
+                //     cmpdirec = malloc(sizeof(char) * 200);
+                //     strcpy(cmpdirec, argumentList[i]);
+                // }
+                if (argumentList[i][0] == '"')
                 {
                     fileflag = 1;
                     cmpfile = malloc(sizeof(char) * 200);
-                    strcpy(cmpfile, argumentList[i]);
+                    char *temp = malloc(sizeof(char) * 250);
+                    // strcpy(temp, argumentList[i]);
+                    int j = 1;
+                    for (j = 1; j < strlen(argumentList[i]) - 1; j++)
+                    {
+                        temp[j - 1] = argumentList[i][j];
+                    }
+                    temp[j - 1] = '\0';
+                    strcpy(cmpfile, temp);
                 }
-                if (i != len - 1)
+                else
                 {
                     direcflag = 1;
                     cmpdirec = malloc(sizeof(char) * 200);
@@ -277,7 +297,6 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
         char *dirtemp = malloc(sizeof(char) * 200);
         strcpy(dirtemp, path);
         strcat(dirtemp, cmpdirec + 1);
-        // printf("PATH IS %s\n", dirtemp);
         length = strlen(dirtemp);
 
         if (argumentList[1][0] == '~')
@@ -340,17 +359,40 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
             }
         }
     }
-    else if (direcflag == 0 && dminflag == 1 && fminflag == 1)
+    else if (direcflag == 0 && dminflag == 1 && fminflag == 1 && fileflag == 0)
     {
         discover(path, 0, 0, 0);
+        return;
     }
-    else if (direcflag == 0 && dminflag == 1 && fminflag == 0)
+    else if (direcflag == 0 && dminflag == 1 && fminflag == 0 && fileflag == 0)
     {
         discover(path, 0, 1, 1);
+        return;
     }
-    else if (direcflag == 0 && dminflag == 0 && fminflag == 1)
+    else if (direcflag == 0 && dminflag == 0 && fminflag == 1 && fileflag == 0)
     {
         discover(path, 0, 1, 0);
+        return;
+    }
+    else if (direcflag == 0 && dminflag == 1 && fminflag == 1 && fileflag == 1)
+    {
+        discover(path, 0, 0, 1);
+        return;
+    }
+    else if (direcflag == 0 && dminflag == 1 && fminflag == 0 && fileflag == 1)
+    {
+        discover(path, 0, 0, 1);
+        return;
+    }
+    else if (direcflag == 0 && dminflag == 0 && fminflag == 1 && fileflag == 1)
+    {
+        discover(path, 0, 0, 1);
+        return;
+    }
+    else if (direcflag == 0 && dminflag == 0 && fminflag == 0 && fileflag == 1)
+    {
+        discover(path, 0, 0, 1);
+        return;
     }
 
     tk1 = 0;
