@@ -196,16 +196,17 @@ void execute(char command[1000])
         }
         else
         {
-            fft = fgproc(argumentList, len);
+            // fft = fgproctime(argumentList, len);
+            fgbgcall(argumentList, len);
         }
         if (chkempty)
         {
             argptr2 = storeargptr2;
         }
-        for (int i = 0; i < len; i++)
-        {
-            argumentList[i][0] = '\0';
-        }
+        // for (int i = 0; i < len; i++)
+        // {
+        //     argumentList[i][0] = '\0';
+        // }
     }
     return;
 }

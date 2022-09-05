@@ -83,7 +83,7 @@ void printstat(struct dirent **list, int count)
             printf("x");
         else
             printf("-");
-        printf("%ld ", stats.st_nlink);                   // Number of hard links
+        printf(" %ld ", stats.st_nlink);                  // Number of hard links
         printf("%s ", (getpwuid(stats.st_uid))->pw_name); // owner name
         printf("%s ", (getgrgid(stats.st_gid))->gr_name); // group name
 
@@ -91,8 +91,30 @@ void printstat(struct dirent **list, int count)
         char last_mod_time[16];
         strftime(last_mod_time, 14, "%h %d %H:%M", localtime(&stats.st_mtime)); // Time of last modification
         printf("%s ", last_mod_time);
-
-        printf("%s\n", list[i]->d_name);
+        if (S_ISDIR(stats.st_mode)) // Blue for directory
+        {
+            printf("\e[34m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else if (stats.st_mode & S_IXUSR) // Greenish for executables
+        {
+            printf("\e[0;33m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else if (strstr(list[i]->d_name, ".zip") || strstr(list[i]->d_name, "gz") || strstr(list[i]->d_name, "xz")) // Red for archive files
+        {
+            printf("\e[0;31m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else if (strstr(list[i]->d_name, ".jpg") || strstr(list[i]->d_name, ".jpeg") || strstr(list[i]->d_name, ".png")) // Magenta for image files
+        {
+            printf("\e[0;35m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else
+        {
+            printf("%s\n", list[i]->d_name);
+        }
     }
 }
 
@@ -535,6 +557,7 @@ void inpls(char *argumentList[250], int len)
     int dotflag = 0;
     int dotdotflag = 0;
     int tildaflag = 0;
+    int alflag = 0;
     char *arr[250];
     int cmds = 0;
 
@@ -551,6 +574,11 @@ void inpls(char *argumentList[250], int len)
         else if (strcmp(argumentList[i], "~") == 0)
         {
             tildaflag = 1;
+        }
+        else if (strcmp(argumentList[i], "-al") == 0 || strcmp(argumentList[i], "-la") == 0)
+        {
+            aflag = 1;
+            lflag = 1;
         }
         else
         {

@@ -3,6 +3,9 @@
 
 #include "headers.h"
 
-int fgproc(char *list[250], int len);
+int fgproctime(char *list[250], int len);
+int fgproc(char *argumentList[250], int len);
+int fgbgcall(char *line[50], int len);
+int bgproc(char *argumentList[250], int len);
 
 #endif

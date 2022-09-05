@@ -1,20 +1,20 @@
-P°ä “à²ä “discover ./temp path.txt
-discovery . path.txt
-discover . path.txt
-discover . -f
-discover . -f path.txt
+echo hello
+echo dwqd
+cd ..
+cd ~
 clear
-discover . -d -f path.txt
-discover . -f path.txt
-clear
-discover ./temp path.txt
-discover .. -f path.txt
-discovery .. -f
-discover .. -f
-discover .. -f temp.py
-discover .. -f path.txt
-clear
-discover ..
-discover . -d
-clear
-discover . -d
+discover /home
+discover -d "path.txt"
+discover "path.txt"
+discover -f "path.txt"
+discover -d -f "path.txt"
+sleep 20 &
+pinfo
+cd ..
+sleep 20 &
+pinfo
+sleep 5
+pinfo
+sleep 20
+sleep 20 &
+pinfo
