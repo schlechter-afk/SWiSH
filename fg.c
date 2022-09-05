@@ -47,62 +47,73 @@ int fgproc(char *argumentList[250], int len)
     return 1;
 }
 
-int fgbgcall(char *line[50], int len)
+int fgbgcall(char *argumentList[250], int len)
 {
     char *childProcName;
-    // printf("len is %d\n", len);
-    if (strcmp(line[len - 1], "&") == 0)
+    setpgrp();
+    if (strcmp(argumentList[len - 1], "&") == 0)
     {
-        // Back Ground Process call
-        line[len - 1] = NULL;
-        len -= 1;
-        return bgproc(line, len);
+        return bgproc(argumentList, len);
     }
 
     else
     {
         // ForeGround Process call
         childProcName = malloc(sizeof(char) * 250);
-        childProcName = line[0];
-        return fgproc(line, len);
+        childProcName = argumentList[0];
+        return fgproc(argumentList, len);
     }
 }
 
 int bgproc(char *argumentList[250], int len)
 {
-    // for (int i = 0; i < len; i++)
-    // {
-    //     printf("~~~ %s\n", argumentList[i]);
-    // }
-    int forkChild;
-    forkChild = fork();
-    // printf("forkchild is %d\n", forkChild);
-    argumentList[len] = NULL;
-    double time_spent = 0.0;
-    time_t begin = time(NULL);
-    if (forkChild == 0)
+    // setpgrp();
+    int lent = 0;
+    char *arglist[250];
+    for (int i = 0; i < len; i++)
     {
-        setpgrp();
-        execvp(argumentList[0], argumentList);
-        perror("something went wrong with bg: ");
-        exit(0);
-    }
-    else
-    {
-        int ppid = forkChild;
-        for (int i = 0; i < 50; i++)
+        if (strcmp(argumentList[i], "&") != 0)
         {
-            if (arrbg[i] == -1)
+            arglist[lent] = malloc(sizeof(char) * 250);
+            strcpy(arglist[lent], argumentList[i]);
+            lent++;
+        }
+        else
+        {
+            pid_t pid = fork();
+            pid_t forkChild = pid;
+            arglist[lent] = NULL;
+            double time_spent = 0.0;
+            time_t begin = time(NULL);
+            if (forkChild == 0)
             {
-                arrbg[i] = ppid;
-                strbg[i] = malloc(sizeof(char) * 250);
-                strcpy(strbg[i], argumentList[0]);
-                printf("[%d] %d\n", i, ppid);
-                break;
+                setpgrp();
+                int return_value = execvp(arglist[0], arglist);
+                perror("something went wrong with bg: ");
+                exit(0);
             }
+            else
+            {
+                int ppid = forkChild;
+                for (int j = 0; j < 50; j++)
+                {
+                    if (arrbg[j] == -1)
+                    {
+                        arrbg[j] = ppid;
+                        strbg[j] = malloc(sizeof(char) * 250);
+                        strcpy(strbg[j], arglist[0]);
+                        printf("[%d] %d\n", j, ppid);
+                        break;
+                    }
+                }
+            }
+            time_t end = time(NULL);
+            time_spent += (double)(end - begin);
+            for (int k = 0; k < lent; k++)
+            {
+                free(arglist[k]);
+            }
+            lent = 0;
         }
     }
-    time_t end = time(NULL);
-    time_spent += (double)(end - begin);
-    return 1;
 }

@@ -44,6 +44,8 @@ void checkChild()
     status = &st;
 
     a = waitpid(-1, status, WNOHANG);
+    perror("beff: ");
+    printf(")) %d\n", a);
     if (a > 0)
     {
         for (int i = 0; i < 50; i++)
@@ -103,24 +105,25 @@ void bgHandler()
     if (pid > 0)
     {
         int pos = 0;
-        while (bgPid[pos] != pid)
+        while (arrbg[pos] != pid)
             pos++;
 
         if (WIFSTOPPED(status))
             return;
 
-        fprintf(stderr, "%s with PID %d exited %s\n", bgCommand[pos], bgPid[pos],
+        fprintf(stderr, "%s with PID %d exited %s\n", strbg[pos], arrbg[pos],
                 WIFEXITED(status) ? "normally" : "abnormally");
 
-        bgPid[pos] = 0;
-        free(bgCommand[pos]);
+        arrbg[pos] = 0;
+        free(strbg[pos]);
+        return;
     }
 }
 
 int main()
 {
-    // checkChild();
-    signal(SIGCHLD, bgHandler);
+    checkChild();
+
     fft = 0;
     int cdcalls = 0;
     char *userName;
@@ -144,7 +147,8 @@ int main()
 
     while (1)
     {
-        checkChild();
+        signal(SIGCHLD, bgHandler);
+        // checkChild();
         getcwd(workdirshell, sizeof(workdirshell));
         char *temphomedir = workdirshell;
         if (strcmp(workdirshell, homedir) == 0)

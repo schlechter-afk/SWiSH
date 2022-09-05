@@ -196,7 +196,7 @@ void execute(char command[1000])
         }
         else
         {
-            // fft = fgproctime(argumentList, len);
+            fft = fgproctime(argumentList, len);
             fgbgcall(argumentList, len);
         }
         if (chkempty)
