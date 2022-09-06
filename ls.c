@@ -121,7 +121,6 @@ void printstat(struct dirent **list, int count)
 void printstatfile(char *list, char *name)
 {
     struct stat stats;
-
     if (stat(list, &stats) == 0)
     {
         if (S_ISDIR(stats.st_mode))
@@ -187,6 +186,43 @@ void printstatfile(char *list, char *name)
     }
 }
 
+void colorprint(char *glob, struct dirent **list, int count)
+{
+    struct stat stats;
+    char *curr = (char *)malloc(sizeof(char) * 250);
+    for (int i = 0; i < count; i++)
+    {
+        strcpy(curr, glob);
+        strcat(curr, "/");
+        strcat(curr, list[i]->d_name);
+        stat(curr, &stats);
+        if (S_ISDIR(stats.st_mode)) // Blue for directory
+        {
+            printf("\e[34m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else if (stats.st_mode & S_IXUSR) // Greenish for executables
+        {
+            printf("\e[0;33m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else if (strstr(list[i]->d_name, ".zip") || strstr(list[i]->d_name, "gz") || strstr(list[i]->d_name, "xz")) // Red for archive files
+        {
+            printf("\e[0;31m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else if (strstr(list[i]->d_name, ".jpg") || strstr(list[i]->d_name, ".jpeg") || strstr(list[i]->d_name, ".png")) // Magenta for image files
+        {
+            printf("\e[0;35m%s\e[30m", list[i]->d_name);
+            printf("\n");
+        }
+        else
+        {
+            printf("%s\n", list[i]->d_name);
+        }
+    }
+}
+
 int default_filter(const struct dirent *dir)
 {
     return (dir->d_name[0] != '.');
@@ -206,6 +242,8 @@ void lscmd(char *argumentList[250], int len)
         int count;
         char *currdirft = (char *)malloc(sizeof(char) * 100);
         getcwd(currdirft, 1000);
+        global = malloc(sizeof(char) * 250);
+        strcpy(global, currdirft);
 
         count = scandir(currdirft, &list, default_filter, alphasort);
 
@@ -214,11 +252,8 @@ void lscmd(char *argumentList[250], int len)
             printf("ls: cannot access the given input: No such file or directory");
             return;
         }
-
-        for (int i = 0; i < count; i++)
-        {
-            printf("%s\n", list[i]->d_name);
-        }
+        printf("%s\n", global);
+        colorprint(global, list, count);
     }
     else
     {
@@ -237,6 +272,9 @@ void lscmd(char *argumentList[250], int len)
                 return;
             }
 
+            global = malloc(sizeof(char) * 250);
+            strcpy(global, chktilda);
+
             count = scandir(chktilda, &list, default_filter, alphasort);
 
             if (count == -1)
@@ -245,10 +283,8 @@ void lscmd(char *argumentList[250], int len)
                 return;
             }
 
-            for (int i = 0; i < count; i++)
-            {
-                printf("%s\n", list[i]->d_name);
-            }
+            colorprint(global, list, count);
+            free(global);
             return;
         }
         else if (strcmp(argumentList[1], "-a") == 0)
@@ -345,6 +381,8 @@ void lscmd(char *argumentList[250], int len)
                 }
                 else
                 {
+                    global = malloc(sizeof(char) * 250);
+                    strcpy(global, currdirft);
                     int count = scandir(currdirft, &list, default_filter2, alphasort);
                     if (count == -1)
                     {
@@ -352,10 +390,8 @@ void lscmd(char *argumentList[250], int len)
                     }
                     else
                     {
-                        for (int i = 0; i < count; i++)
-                        {
-                            printf("%s\n", list[i]->d_name);
-                        }
+                        colorprint(global, list, count);
+                        free(global);
                     }
                     return;
                 }
@@ -380,10 +416,10 @@ void lscmd(char *argumentList[250], int len)
                     return;
                 }
 
-                for (int i = 0; i < count; i++)
-                {
-                    printf("%s\n", list[i]->d_name);
-                }
+                global = malloc(sizeof(char) * 250);
+                strcpy(global, currdirft);
+                colorprint(global, list, count);
+                free(global);
                 return;
             }
         }
@@ -428,11 +464,10 @@ void lscmd(char *argumentList[250], int len)
                 printf("ls: cannot access the given input: No such file or directory");
                 return;
             }
-
-            for (int i = 0; i < count; i++)
-            {
-                printf("%s\n", list[i]->d_name);
-            }
+            global = malloc(sizeof(char) * 250);
+            strcpy(global, currdirft);
+            colorprint(global, list, count);
+            free(global);
             return;
         }
         else if ((strcmp(argumentList[1], "-l") == 0) && len == 2)
@@ -457,6 +492,7 @@ void lscmd(char *argumentList[250], int len)
                 return;
             }
             printstat(list, count);
+            free(global);
             return;
         }
         else if ((strcmp(argumentList[1], "-l") == 0) && len == 3)
@@ -494,6 +530,7 @@ void lscmd(char *argumentList[250], int len)
                 return;
             }
             printstat(list, count);
+            free(global);
             return;
         }
         else if ((strcmp(argumentList[1], "-al") == 0) || ((strcmp(argumentList[1], "-la") == 0)))
@@ -508,12 +545,15 @@ void lscmd(char *argumentList[250], int len)
             }
 
             int count = scandir(currdirft, &list, default_filter2, alphasort);
+            global = malloc(sizeof(char) * 250);
+            strcpy(global, currdirft);
             if (count == -1)
             {
                 printf("ls: cannot access the given input: No such file or directory");
                 return;
             }
             printstat(list, count);
+            free(global);
             return;
         }
         else
@@ -523,6 +563,8 @@ void lscmd(char *argumentList[250], int len)
                 struct dirent **list = NULL;
                 int count;
                 count = scandir(argumentList[1], &list, default_filter, alphasort);
+                global = malloc(sizeof(char) * 250);
+                strcpy(global, argumentList[1]);
 
                 if (count == -1)
                 {
@@ -531,10 +573,8 @@ void lscmd(char *argumentList[250], int len)
                 }
                 else
                 {
-                    for (int i = 0; i < count; i++)
-                    {
-                        printf("%s\n", list[i]->d_name);
-                    }
+                    colorprint(global, list, count);
+                    free(global);
                 }
                 return;
             }

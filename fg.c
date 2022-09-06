@@ -10,7 +10,12 @@ int fgproc(char *argumentList[250], int len)
     time_t begin = time(NULL);
     if (forkChild == 0)
     {
-        execvp(argumentList[0], argumentList);
+        int ret = execvp(argumentList[0], argumentList);
+        if (ret == -1)
+        {
+            printf("INVALID COMMAND ;)\n");
+            return 1;
+        }
         perror("something went wrong with fg: ");
         exit(0);
     }
