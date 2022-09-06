@@ -36,7 +36,7 @@ void orange(char *str)
     printf("\e[97m");
 }
 
-void handler()
+void bgHandler()
 {
     int status;
     int pid = waitpid(-1, &status, WNOHANG);
@@ -45,13 +45,11 @@ void handler()
     {
         int pos = 0;
         while (arrbg[pos] != pid)
-        {
             pos++;
-        }
+
         if (WIFSTOPPED(status))
-        {
             return;
-        }
+
         fprintf(stderr, "%s with PID %d exited %s\n", strbg[pos], arrbg[pos],
                 WIFEXITED(status) ? "normally" : "abnormally");
 
@@ -86,7 +84,7 @@ int main()
 
     while (1)
     {
-        signal(SIGCHLD, handler);
+        signal(SIGCHLD, bgHandler);
         getcwd(workdirshell, sizeof(workdirshell));
         char *temphomedir = workdirshell;
         if (strcmp(workdirshell, homedir) == 0)
@@ -190,9 +188,11 @@ int main()
         }
 
         char *copycmd = (char *)malloc((sizeof(char *) * 200));
+
         strcpy(copycmd, command);
 
         int flagchk = 1;
+
         for (int i = 0; i < strlen(copycmd) - 1; i++)
         {
             if (copycmd[i] != ' ' && copycmd[i] != '\t')
@@ -200,6 +200,7 @@ int main()
                 flagchk = 0;
             }
         }
+
         if (flagchk)
         {
             continue;

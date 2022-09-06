@@ -5,7 +5,6 @@ int fgproc(char *argumentList[250], int len)
     timetaken = -1;
     int forkChild;
     forkChild = fork();
-    // printf("fg fork is %d\n", forkChild);
     argumentList[len] = NULL;
     double time_spent = 0.0;
     time_t begin = time(NULL);
@@ -53,7 +52,6 @@ int fgbgcall(char *argumentList[250], int len)
     }
     if (lent != 0)
     {
-        // printf("WELCOME TO FGPROC\n");
         fgproc(arglist, lent);
     }
 }
@@ -65,9 +63,9 @@ int bgproc(char *argumentList[250], int len)
     argumentList[len] = NULL;
     if (forkChild == 0)
     {
-        setpgrp(); // for setting status code correctly in case pinfo is run..
+        setpgrp();
         int return_value = execvp(argumentList[0], argumentList);
-        perror("INVALID: ");
+        perror("something went wrong with bg: ");
         exit(0);
     }
     else

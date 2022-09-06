@@ -43,8 +43,10 @@ void execute(char command[1000])
         }
 
         argptr2 = strtok_r(NULL, delim, &saveptr_arg2);
+
         char *storeargptr2 = (char *)malloc(sizeof(char) * 100);
-        // assert(storeargptr2 != NULL);
+
+        // // assert(storeargptr2!=NULL);
         int chkempty = 0;
         if (argptr2 != NULL)
         {
