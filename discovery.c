@@ -38,7 +38,6 @@ void discover(char *path, int flag1, int flag2, int flag3)
         strcpy(toconcat1, list[i]->d_name);
 
         strcat(concat1, toconcat1);
-        // printf("---> %s\n", concat1);
 
         if (list[i]->d_name[0] != '.')
         {
@@ -91,7 +90,6 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
     int fileflag = 0;
     int dminflag = 0;
     int fminflag = 0;
-    // printf("%d\n", len);
     if (len > 1)
     {
         for (int i = 1; i < len; i++)
@@ -118,18 +116,6 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
             }
             else
             {
-                // if (direcflag == 1 || i == (len - 1))
-                // {
-                //     fileflag = 1;
-                //     cmpfile = malloc(sizeof(char) * 200);
-                //     strcpy(cmpfile, argumentList[i]);
-                // }
-                // if (i != len - 1)
-                // {
-                //     direcflag = 1;
-                //     cmpdirec = malloc(sizeof(char) * 200);
-                //     strcpy(cmpdirec, argumentList[i]);
-                // }
                 if (argumentList[i][0] == '"')
                 {
                     fileflag = 1;
@@ -154,13 +140,13 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
         }
     }
 
-    printf("dflag is %d\n", dminflag);
-    printf("fflag is %d\n", fminflag);
-    printf("dotflag is %d\n", dotflag);
-    printf("dotdotflag is %d\n", dotdotflag);
-    printf("tildaflag is %d\n", tildaflag);
-    printf("direcnameflag is %d\n", direcflag);
-    printf("filenameflag is %d\n", fileflag);
+    // printf("dflag is %d\n", dminflag);
+    // printf("fflag is %d\n", fminflag);
+    // printf("dotflag is %d\n", dotflag);
+    // printf("dotdotflag is %d\n", dotdotflag);
+    // printf("tildaflag is %d\n", tildaflag);
+    // printf("direcnameflag is %d\n", direcflag);
+    // printf("filenameflag is %d\n", fileflag);
 
     if (dminflag == 0 && fminflag == 0 && dotflag == 0 && dotdotflag == 0 && tildaflag == 0 && direcflag == 0 && fileflag == 0)
     {
@@ -394,7 +380,5 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
         discover(path, 0, 0, 1);
         return;
     }
-
     tk1 = 0;
-    // discover(path);
 }

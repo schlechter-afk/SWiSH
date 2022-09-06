@@ -36,68 +36,7 @@ void orange(char *str)
     printf("\e[97m");
 }
 
-void checkChild()
-{
-    int st;
-    int *status;
-    pid_t a;
-    status = &st;
-
-    a = waitpid(-1, status, WNOHANG);
-    perror("beff: ");
-    printf(")) %d\n", a);
-    if (a > 0)
-    {
-        for (int i = 0; i < 50; i++)
-        {
-            if (arrbg[i] == a)
-            {
-                arrbg[i] = -1;
-                fprintf(stderr, "%s with pid %d exited normally\n", strbg[i], a);
-                break;
-            }
-        }
-        // fprintf(stderr, "pid %d exicted Normally\n", a);
-    }
-}
-
-int bgPid[100] = {1};
-char *bgCommand[100];
-
-void addBg(int pid, char *command)
-{
-    if (!pid)
-        return;
-
-    int pos = 99;
-
-    while (!bgPid[pos])
-        pos--;
-
-    pos++;
-
-    bgPid[pos] = pid;
-    bgCommand[pos] = malloc(strlen(command) + 1);
-    strcpy(bgCommand[pos], command);
-}
-
-void removeBg(int pid)
-{
-    if (!pid)
-        return;
-
-    for (int i = 1; i < 100; i++)
-    {
-        if (bgPid[i] == pid)
-        {
-            bgPid[i] = 0;
-            free(bgCommand[i]);
-            break;
-        }
-    }
-}
-
-void bgHandler()
+void handler()
 {
     int status;
     int pid = waitpid(-1, &status, WNOHANG);
@@ -106,11 +45,13 @@ void bgHandler()
     {
         int pos = 0;
         while (arrbg[pos] != pid)
+        {
             pos++;
-
+        }
         if (WIFSTOPPED(status))
+        {
             return;
-
+        }
         fprintf(stderr, "%s with PID %d exited %s\n", strbg[pos], arrbg[pos],
                 WIFEXITED(status) ? "normally" : "abnormally");
 
@@ -122,8 +63,6 @@ void bgHandler()
 
 int main()
 {
-    checkChild();
-
     fft = 0;
     int cdcalls = 0;
     char *userName;
@@ -147,8 +86,7 @@ int main()
 
     while (1)
     {
-        signal(SIGCHLD, bgHandler);
-        // checkChild();
+        signal(SIGCHLD, handler);
         getcwd(workdirshell, sizeof(workdirshell));
         char *temphomedir = workdirshell;
         if (strcmp(workdirshell, homedir) == 0)
@@ -182,6 +120,7 @@ int main()
 
         if (flag)
         {
+            printf("\r");
             orange("<");
             orange(userName);
             orange("@");
@@ -189,12 +128,12 @@ int main()
             blue(":");
             blue("~");
             blue(temphomedir);
-            if (fft > 1)
+            if (timetaken > 1)
             {
                 blue(" ");
                 blue("took");
                 blue(" ");
-                blueint(fft);
+                blueint(timetaken);
                 blue(" ");
                 blue("seconds");
             }
@@ -203,24 +142,25 @@ int main()
         }
         else
         {
+            printf("\r");
             orange("<");
             orange(userName);
             orange("@");
             orange(host);
             blue(":");
             blue(temphomedir);
-            if (fft > 1)
+            if (timetaken > 1)
             {
                 blue(" ");
                 blue("took");
                 blue(" ");
-                blueint(fft);
+                blueint(timetaken);
                 blue(" ");
                 blue("seconds");
             }
             blue(">");
             printf(" ");
-            fft = 0;
+            timetaken = 0;
         }
 
         ssize_t getbuff = 0;
@@ -250,11 +190,9 @@ int main()
         }
 
         char *copycmd = (char *)malloc((sizeof(char *) * 200));
-
         strcpy(copycmd, command);
 
         int flagchk = 1;
-
         for (int i = 0; i < strlen(copycmd) - 1; i++)
         {
             if (copycmd[i] != ' ' && copycmd[i] != '\t')
@@ -262,7 +200,6 @@ int main()
                 flagchk = 0;
             }
         }
-
         if (flagchk)
         {
             continue;

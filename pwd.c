@@ -1,7 +1,6 @@
 #include "headers.h"
 #include "pwd.h"
 #include "globals.h"
-// #include "replace.h"
 
 void pwdcmd()
 {

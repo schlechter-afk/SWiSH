@@ -99,7 +99,7 @@ void pinfocmd(char *argumentList[250], int len)
             ptr = strtok(NULL, " \t\n");
         }
         printf("pid : %s\n", statpinfo[0]);
-        if (strcmp(statpinfo[0], statpinfo[7]) == 0)
+        if (strcmp(statpinfo[4], statpinfo[7]) == 0)
         {
             printf("Process Status : %s+\n", statpinfo[2]);
         }

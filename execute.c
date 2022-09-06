@@ -13,30 +13,18 @@ void execute(char command[1000])
     char delim[2] = ";";
     argptr2 = strtok_r(command, delim, &saveptr_arg2);
 
-    // printf("### argptr2 is %s\n", argptr2);
-    // printf("Here it is : %s\n", str);
-
     while (argptr2 != NULL)
     {
-        // printf("THE START argptr2 is %s\n", argptr2);
-
         argptr1 = strtok_r(argptr2, " \t\n", &saveptr_arg1);
         char *argumentList[300];
         char *templist[300];
-
-        // printf("-->argptr1 is %s\n", argptr1);
-        // printf("%s\n", saveptr_arg1);
-        // printf("%s\n", saveptr_arg2);
 
         int len = 0;
         while (argptr1 != NULL)
         {
             argumentList[len++] = argptr1;
             argptr1 = strtok_r(NULL, " \t\n", &saveptr_arg1);
-            // printf("Argument list comprises of %s %d\n", argumentList[len - 1], len);
         }
-
-        // printf("### argptr2 is %s\n", argptr2);
 
         bool check = false;
         for (int i = 0; i < strlen(argumentList[len - 1]); i++)
@@ -55,12 +43,8 @@ void execute(char command[1000])
         }
 
         argptr2 = strtok_r(NULL, delim, &saveptr_arg2);
-
-        // printf("::::argptr2 is %s\n", argptr2);
-
         char *storeargptr2 = (char *)malloc(sizeof(char) * 100);
-
-        // // assert(storeargptr2!=NULL);
+        // assert(storeargptr2 != NULL);
         int chkempty = 0;
         if (argptr2 != NULL)
         {
@@ -68,23 +52,8 @@ void execute(char command[1000])
             strcpy(storeargptr2, argptr2);
         }
 
-        // // printf("Reached here\n");
-        // printf("# argptr2 is %s\n", argptr2);
-
-        // for (int i = 0; i < len; i++)
-        // {
-        //     printf("----> %s\n", argumentList[i]);
-        // }
-
         if (strcmp("cd", argumentList[0]) == 0)
         {
-            // char *addtohist = (char *)malloc(sizeof(char) * 200);
-            // addtohist[0] = '\0';
-            // for (int i = 0; i < len; i++)
-            // {
-            //     strcat(addtohist, argumentList[i]);
-            // }
-            // add_command_to_history(addtohist);
             if (len == 1)
             {
                 char *tempcurrentdirectory = malloc(sizeof(char) * 200);
@@ -108,13 +77,6 @@ void execute(char command[1000])
 
         else if (strcmp("echo", argumentList[0]) == 0)
         {
-            // char *addtohist = (char *)malloc(sizeof(char) * 200);
-            // addtohist[0] = '\0';
-            // for (int i = 0; i < len; i++)
-            // {
-            //     strcat(addtohist, argumentList[i]);
-            // }
-            // add_command_to_history(addtohist);
             echocmd(argumentList, len);
             for (int i = 0; i < len; i++)
             {
@@ -124,13 +86,6 @@ void execute(char command[1000])
 
         else if (strcmp("pwd", argumentList[0]) == 0)
         {
-            // char *addtohist = (char *)malloc(sizeof(char) * 200);
-            // addtohist[0] = '\0';
-            // for (int i = 0; i < len; i++)
-            // {
-            //     strcat(addtohist, argumentList[i]);
-            // }
-            // add_command_to_history(addtohist);
             pwdcmd();
             for (int i = 0; i < len; i++)
             {
@@ -140,13 +95,6 @@ void execute(char command[1000])
 
         else if (strcmp("clear", argumentList[0]) == 0)
         {
-            // char *addtohist = (char *)malloc(sizeof(char) * 200);
-            // addtohist[0] = '\0';
-            // for (int i = 0; i < len; i++)
-            // {
-            //     strcat(addtohist, argumentList[i]);
-            // }
-            // add_command_to_history(addtohist);
             printf("\e[1;1H\e[2J");
             for (int i = 0; i < len; i++)
             {
@@ -155,13 +103,6 @@ void execute(char command[1000])
         }
         else if (strcmp("ls", argumentList[0]) == 0)
         {
-            // char *addtohist = (char *)malloc(sizeof(char) * 200);
-            // addtohist[0] = '\0';
-            // for (int i = 0; i < len; i++)
-            // {
-            //     strcat(addtohist, argumentList[i]);
-            // }
-            // add_command_to_history(addtohist);
             inpls(argumentList, len);
             for (int i = 0; i < len; i++)
             {
@@ -196,7 +137,6 @@ void execute(char command[1000])
         }
         else
         {
-            fft = fgproctime(argumentList, len);
             fgbgcall(argumentList, len);
         }
         if (chkempty)

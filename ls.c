@@ -187,20 +187,18 @@ void printstatfile(char *list, char *name)
     }
 }
 
-int default_filter(const struct dirent *ent)
+int default_filter(const struct dirent *dir)
 {
-    return (ent->d_name[0] != '.');
+    return (dir->d_name[0] != '.');
 }
 
-int default_filter2(const struct dirent *ent)
+int default_filter2(const struct dirent *dir)
 {
     return 1;
 }
 
 void lscmd(char *argumentList[250], int len)
 {
-    // printf("%s\n", argumentList[1]);
-
     setlocale(LC_ALL, "");
     if (len == 1 || strcmp(argumentList[1], ".") == 0)
     {
@@ -232,7 +230,7 @@ void lscmd(char *argumentList[250], int len)
             char *chktilda = (char *)malloc(sizeof(char *) * 200);
             strcpy(chktilda, homedir);
             strcat(chktilda, argumentList[1] + 1);
-            // printf("%s\n",chktilda);
+
             if (access(chktilda, F_OK))
             {
                 printf("No such file/directory\n");
@@ -584,7 +582,6 @@ void inpls(char *argumentList[250], int len)
         {
             arr[cmds] = malloc(sizeof(char) * 50);
             arr[cmds] = argumentList[i];
-            // printf("arrcmds is %s\n", arr[cmds]);
             cmds++;
         }
     }

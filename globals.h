@@ -11,6 +11,7 @@ char *argptr1;
 char *argptr2;
 char *history[20];
 int history_count;
+int timetaken;
 int arrbg[250];
 char *strbg[250];
 
