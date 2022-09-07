@@ -25,7 +25,7 @@ char *extract(char *workdirshell)
         if (truth)
         {
             char *nextstr;
-            nextstr = (char *)malloc(sizeof(char *) * 200);
+            nextstr = (char *)malloc(sizeof(char *) * 500);
             for (int i = strlen(homedir); i <= strlen(workdirshell); i++)
             {
                 nextstr[i - strlen(homedir)] = workdirshell[i];
@@ -35,7 +35,7 @@ char *extract(char *workdirshell)
         }
     }
 
-    char *toreturn = (char *)malloc(sizeof(char) * 200);
+    char *toreturn = (char *)malloc(sizeof(char) * 500);
 
     if (flag)
     {
@@ -53,8 +53,8 @@ void pinfocmd(char *argumentList[250], int len)
 {
     int cnt = 0;
     int pid;
-    char *statpathbuff = (char *)malloc(sizeof(char) * 2000);
-    char *execpathbuff = (char *)malloc(sizeof(char) * 2000);
+    char *statpathbuff = (char *)malloc(sizeof(char) * 20000);
+    char *execpathbuff = (char *)malloc(sizeof(char) * 20000);
     if (len > 2)
     {
         printf("Invalid Command\n");
@@ -69,19 +69,19 @@ void pinfocmd(char *argumentList[250], int len)
         pid = getpid();
     }
 
-    char *statpath = (char *)malloc(sizeof(char) * 200);
-    char *temppath = (char *)malloc(sizeof(char) * 200);
+    char *statpath = (char *)malloc(sizeof(char) * 2000);
+    char *temppath = (char *)malloc(sizeof(char) * 2000);
 
     sprintf(temppath, "/proc/%d/", pid);
     strcpy(statpath, temppath);
 
-    char *execpath = (char *)malloc(sizeof(char) * 200);
+    char *execpath = (char *)malloc(sizeof(char) * 2000);
     strcpy(execpath, statpath);
     strcat(statpath, "/stat");
     strcat(execpath, "/exe");
     readlink(execpath, execpathbuff, 2000);
     int fd = open(statpath, O_RDONLY);
-    ssize_t countvar = read(fd, statpathbuff, 2000);
+    ssize_t countvar = read(fd, statpathbuff, 20000);
 
     if (fd < 0)
     {
@@ -90,7 +90,7 @@ void pinfocmd(char *argumentList[250], int len)
     }
     else
     {
-        char *ptr = (char *)malloc(sizeof(char) * 2000);
+        char *ptr = (char *)malloc(sizeof(char) * 20000);
         char *statpinfo[2000];
         ptr = strtok(statpathbuff, " \t\n");
         while (ptr != NULL)
