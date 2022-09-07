@@ -1,6 +1,7 @@
 <!-- file is written in markdown format -->
 
 ```
+Welcome to SWiSH
 Basic Linux Styled C-Shell
 ```
 
@@ -69,16 +70,16 @@ Shell able to run multiple foreground and background processes, and not just one
 
 Assumption : It is expected that the user enters a space between the time argument of the sleep function and the & operator differentiating this process from the other commands in the same line.
 In case of multiple processes in command-line , sometimes the ending signal will printed in the command prompt bar and user will have to enter the enter button to start a new-line of command argument.
+For multiple sleep commands running in foreground : The program prints the time taken by sleep command entered in the last.
 ```
 ```
-Example Input 
+Example Input
+Here the user needs to press the enter button to start a new-line of commands. 
 ```
 
 <img src="Assumption1.jpeg"></img>
 
-```
-Here the user needs to press the enter button to start a new-line of commands.
-```
+<img src="Assumption2.jpeg"></img>
 
 # ****Specification 5: pinfo****
 
@@ -98,6 +99,7 @@ discover.c discover.h
 ```
 ```
 For reasonable and sound input this command lets the user to search for files recursively in all the sub-folders of the given folder and returns the location of the entered file , handling flags such as -d (only directories) and -f (only files) too , hence emulating the idea of the find functionality in actual linux terminal.
+Hidden folders would not be searched for any input file.
 ```
 
 # ****Specification 8: history****

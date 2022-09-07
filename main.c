@@ -126,7 +126,7 @@ int main()
             blue(":");
             blue("~");
             blue(temphomedir);
-            if (timetaken > 1)
+            if (timetaken >= 1)
             {
                 blue(" ");
                 blue("took");
@@ -147,7 +147,7 @@ int main()
             orange(host);
             blue(":");
             blue(temphomedir);
-            if (timetaken > 1)
+            if (timetaken >= 1)
             {
                 blue(" ");
                 blue("took");

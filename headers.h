@@ -27,7 +27,6 @@
 #include "pinfo.h"
 #include "discovery.h"
 #include "fg.h"
-#include "bg.h"
 #include <time.h>
 
 int fft;
