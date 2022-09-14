@@ -3,7 +3,6 @@
 ```
 Welcome to SWiSH
 Basic Linux Styled C-Shell
-Github Link : https://github.com/schlechter-afk/SWiSH
 ```
 
 ```

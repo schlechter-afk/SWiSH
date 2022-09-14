@@ -36,7 +36,7 @@ void orange(char *str)
     printf("\e[97m");
 }
 
-void bgHandler()
+void termcheck()
 {
     int status;
     int pid = waitpid(-1, &status, WNOHANG);
@@ -45,22 +45,38 @@ void bgHandler()
     {
         int pos = 0;
         while (arrbg[pos] != pid)
+        {
             pos++;
-
+        }
         if (WIFSTOPPED(status))
+        {
             return;
-
-        fprintf(stderr, "%s with PID %d exited %s\n", strbg[pos], arrbg[pos],
-                WIFEXITED(status) ? "normally" : "abnormally");
-
-        arrbg[pos] = 0;
-        free(strbg[pos]);
+        }
+        else
+        {
+            if (WIFEXITED(status))
+            {
+                fprintf(stderr, "%s with PID %d exited normally\n", strbg[pos], arrbg[pos]);
+            }
+            else
+            {
+                fprintf(stderr, "%s with PID %d exited abnormally\n", strbg[pos], arrbg[pos]);
+            }
+            arrbg[pos] = 0;
+            free(strbg[pos]);
+            return;
+        }
+    }
+    else
+    {
         return;
     }
 }
 
 int main()
 {
+    stdinptr = dup(0);
+    stdoutptr = dup(1);
     fft = 0;
     int cdcalls = 0;
     char *userName;
@@ -84,7 +100,9 @@ int main()
 
     while (1)
     {
-        signal(SIGCHLD, bgHandler);
+        dup2(stdoutptr, 1);
+        dup2(stdinptr, 0);
+        signal(SIGCHLD, termcheck);
         getcwd(workdirshell, sizeof(workdirshell));
         char *temphomedir = workdirshell;
         if (strcmp(workdirshell, homedir) == 0)
@@ -164,6 +182,8 @@ int main()
         ssize_t getbuff = 0;
         char *command = (char *)malloc((sizeof(char) * 200));
         int len;
+        dup2(stdoutptr, 1);
+        dup2(stdinptr, 0);
         printf("\033[1;30m");
 
         len = getline(&command, &getbuff, stdin);
@@ -180,7 +200,7 @@ int main()
             add_command_to_history(command);
         }
 
-        printf("\033[1;30m");
+        // printf("\033[1;30m");
 
         if (strlen(command) == 1)
         {
@@ -207,7 +227,22 @@ int main()
         }
         else
         {
-            execute(command);
+            int flag = 0;
+            for (int i = 0; i < strlen(command); i++)
+            {
+                if (command[i] == '|')
+                {
+                    flag = 1;
+                }
+            }
+            if (flag)
+            {
+                piping(command);
+            }
+            else
+            {
+                execute(command);
+            }
         }
     }
     return 0;

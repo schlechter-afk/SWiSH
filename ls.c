@@ -83,13 +83,13 @@ void printstat(struct dirent **list, int count)
             printf("x");
         else
             printf("-");
-        printf(" %ld ", stats.st_nlink);                  // Number of hard links
-        printf("%s ", (getpwuid(stats.st_uid))->pw_name); // owner name
-        printf("%s ", (getgrgid(stats.st_gid))->gr_name); // group name
+        printf(" %ld ", stats.st_nlink);                  
+        printf("%s ", (getpwuid(stats.st_uid))->pw_name); 
+        printf("%s ", (getgrgid(stats.st_gid))->gr_name); 
 
         printf("%ld ", stats.st_size); // Total size, in bytes
         char last_mod_time[16];
-        strftime(last_mod_time, 14, "%h %d %H:%M", localtime(&stats.st_mtime)); // Time of last modification
+        strftime(last_mod_time, 14, "%h %d %H:%M", localtime(&stats.st_mtime)); 
         printf("%s ", last_mod_time);
         if (S_ISDIR(stats.st_mode)) // Blue for directory
         {
@@ -173,13 +173,13 @@ void printstatfile(char *list, char *name)
         else
             printf("-");
         printf(" ");
-        printf("%ld ", stats.st_nlink);                   // Number of hard links
-        printf("%s ", (getpwuid(stats.st_uid))->pw_name); // owner name
-        printf("%s ", (getgrgid(stats.st_gid))->gr_name); // group name
+        printf("%ld ", stats.st_nlink);                   
+        printf("%s ", (getpwuid(stats.st_uid))->pw_name); 
+        printf("%s ", (getgrgid(stats.st_gid))->gr_name); 
 
         printf("%ld ", stats.st_size); // Total size, in bytes
         char last_mod_time[16];
-        strftime(last_mod_time, 14, "%h %d %H:%M", localtime(&stats.st_mtime)); // Time of last modification
+        strftime(last_mod_time, 14, "%h %d %H:%M", localtime(&stats.st_mtime)); 
         printf("%s ", last_mod_time);
 
         printf("%s\n", name);
@@ -252,7 +252,7 @@ void lscmd(char *argumentList[250], int len)
             printf("ls: cannot access the given input: No such file or directory");
             return;
         }
-        printf("%s\n", global);
+        // printf("%s\n", global);
         colorprint(global, list, count);
     }
     else

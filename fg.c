@@ -11,6 +11,7 @@ int fgproc(char *argumentList[250], int len)
     if (forkChild == 0)
     {
         int ret = execvp(argumentList[0], argumentList);
+        perror("file nahi hai aisi koi");
         if (ret == -1)
         {
             printf("INVALID COMMAND ;)\n");
@@ -39,9 +40,15 @@ int fgbgcall(char *argumentList[250], int len)
     {
         if (strcmp(argumentList[i], "&") != 0)
         {
-            arglist[lent] = malloc(sizeof(char) * 250);
-            strcpy(arglist[lent], argumentList[i]);
-            lent++;
+            if (strcmp(argumentList[i], "<") == 0 || strcmp(argumentList[i], ">") == 0)
+            {
+            }
+            else
+            {
+                arglist[lent] = malloc(sizeof(char) * 250);
+                strcpy(arglist[lent], argumentList[i]);
+                lent++;
+            }
         }
         else
         {

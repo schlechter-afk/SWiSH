@@ -140,14 +140,6 @@ void executediscover(char *path, char *home, char *argumentList[50], int len)
         }
     }
 
-    // printf("dflag is %d\n", dminflag);
-    // printf("fflag is %d\n", fminflag);
-    // printf("dotflag is %d\n", dotflag);
-    // printf("dotdotflag is %d\n", dotdotflag);
-    // printf("tildaflag is %d\n", tildaflag);
-    // printf("direcnameflag is %d\n", direcflag);
-    // printf("filenameflag is %d\n", fileflag);
-
     if (dminflag == 0 && fminflag == 0 && dotflag == 0 && dotdotflag == 0 && tildaflag == 0 && direcflag == 0 && fileflag == 0)
     {
         discover(path, 0, 0, 0);

@@ -2,6 +2,8 @@
 #include "echo.h"
 #include "globals.h"
 
+char *strcomm;
+
 void execute(char command[1000])
 {
     int checkempty = 1;
@@ -12,6 +14,9 @@ void execute(char command[1000])
     argptr2 = (char *)malloc(sizeof(char) * 200);
     char delim[2] = ";";
     argptr2 = strtok_r(command, delim, &saveptr_arg2);
+
+    strcomm = (char *)malloc(1000);
+    strcpy(strcomm, command);
 
     while (argptr2 != NULL)
     {
@@ -26,17 +31,6 @@ void execute(char command[1000])
             argptr1 = strtok_r(NULL, " \t\n", &saveptr_arg1);
         }
 
-        bool check = false;
-        for (int i = 0; i < strlen(argumentList[len - 1]); i++)
-        {
-            if (argumentList[len - 1][i] != ' ' && argumentList[len - 1][i] != '\n')
-                check = true;
-        }
-        if (!check)
-        {
-            len--;
-        }
-
         if (len == 0)
         {
             return;
@@ -46,13 +40,108 @@ void execute(char command[1000])
 
         char *storeargptr2 = (char *)malloc(sizeof(char) * 100);
 
-        // // assert(storeargptr2!=NULL);
         int chkempty = 0;
         if (argptr2 != NULL)
         {
             chkempty = 1;
             strcpy(storeargptr2, argptr2);
         }
+
+        int input_file_flag = 0, output_file_flag = 0, append_flag = 0;
+
+        char *inputfile = malloc(1000);
+        char *outputfile = malloc(1000);
+        char *appendf = malloc(1000);
+
+        int fd;
+        int fd2;
+        int fd3;
+
+        for (int i = 0; i < len; i++)
+        {
+            if (!(strcmp(argumentList[i], "<")))
+            {
+                strcpy(inputfile, argumentList[i + 1]);
+                input_file_flag = 1;
+            }
+            else if (!(strcmp(argumentList[i], ">")))
+            {
+                strcpy(outputfile, argumentList[i + 1]);
+                output_file_flag = 1;
+            }
+            else if (!(strcmp(argumentList[i], ">>")))
+            {
+                strcpy(appendf, argumentList[i + 1]);
+                append_flag = 1;
+            }
+        }
+
+        int flagg = 0;
+        int x = len;
+        for (int i = 0; i < len; i++)
+        {
+            if (strcmp(argumentList[i], "<") == 0 || strcmp(argumentList[i], ">") == 0 || strcmp(argumentList[i], ">>") == 0)
+            {
+                argumentList[i][0] = '\0';
+                x--;
+                flagg = 1;
+            }
+            if (flagg && argumentList[i][0] != '\0')
+            {
+                argumentList[i][0] = '\0';
+                x--;
+            }
+        }
+        len = x;
+
+        if (input_file_flag)
+        {
+            fd = open(inputfile, O_RDONLY, 0);
+            if (fd < 0)
+            {
+                perror("Error opening input file");
+                return;
+            }
+            if (dup2(fd, 0) < 0)
+            {
+                perror("Error - duping the input");
+                return;
+            }
+        }
+
+        if (output_file_flag)
+        {
+            fd2 = open(outputfile, O_TRUNC | O_CREAT | O_WRONLY, 0644);
+            if (fd2 < 0)
+            {
+                perror("Error opening output file");
+                return;
+            }
+            if (dup2(fd2, 1) < 0)
+            {
+                perror("Error - duping the output");
+                return;
+            }
+        }
+
+        if (append_flag)
+        {
+            fd3 = open(appendf, O_APPEND | O_CREAT | O_WRONLY, 0644);
+            if (fd3 < 0)
+            {
+                perror("Error opening the to be appended file");
+                return;
+            }
+            if (dup2(fd3, 1) < 0)
+            {
+                perror("Error - duping while appending");
+                return;
+            }
+        }
+
+        // *************************************
+
+        // printf("%s\n", argumentList[0]);
 
         if (strcmp("cd", argumentList[0]) == 0)
         {
@@ -145,6 +234,11 @@ void execute(char command[1000])
         {
             argptr2 = storeargptr2;
         }
+        close(fd);
+        close(fd2);
+        close(fd3);
+
+        // TRY uncommenting if getting seg fault;
         // for (int i = 0; i < len; i++)
         // {
         //     argumentList[i][0] = '\0';
