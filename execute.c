@@ -3,9 +3,24 @@
 #include "globals.h"
 
 char *strcomm;
+int fgRunning = 0;
+
+// void controlhandle()
+// {
+//     if (fgRunning)
+//     {
+//         fgRunning = 0;
+//     }
+// }
 
 void execute(char command[1000])
 {
+    // signal(SIGINT, controlhandle);
+    // signal(SIGTSTP, controlhandle);
+
+    // signal(SIGTSTP, SIG_IGN);
+    // signal(SIGINT, SIG_IGN);
+
     int checkempty = 1;
     int count = 0;
     char *saveptr_arg1 = (char *)malloc(sizeof(char) * 200);
@@ -226,8 +241,17 @@ void execute(char command[1000])
                 argumentList[i][0] = '\0';
             }
         }
+        else if (strcmp("sig", argumentList[0]) == 0)
+        {
+            sigfunc(argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
         else
         {
+            fgRunning = 1;
             fgbgcall(argumentList, len);
         }
         if (chkempty)

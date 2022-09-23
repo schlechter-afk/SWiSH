@@ -28,6 +28,7 @@
 #include "discovery.h"
 #include "fg.h"
 #include "pipe.h"
+#include "sig.h"
 
 #include <time.h>
 

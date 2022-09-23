@@ -3,6 +3,7 @@
 ```
 Welcome to SWiSH
 Basic Linux Styled C-Shell
+Assignment-3 at end
 ```
 
 ```
@@ -113,4 +114,19 @@ Adds a command to a history log (here history.txt) storing the commands entered 
 The log stores the latest 20 unique commands entered by the user.
 Whenever history command is called , the latest 10 are printed.When the commmands stored in the log exceeds 20 , we pop the oldest command out of the log and push the latest command into the log.
 ```
+# ****Assignment - 3****
+
+# ***Specification 1: I/O Redirection***
+# ***Specification 2: Command Pipelines***
+# ***Specification 3: I/O Redirection within command pipelines***
+
+
+```
+Spec 1,2,3 included in execute.c pipe.c
+```
+```
+File with function to execute piped commands.
+<, >, >> and | will always have their special meanings and will be used correctly. This means that for I/O redirection, a file will always come after the arrow. Similary, a command will always come after a pipe.
+```
+
 <p>Made with <span style="font-size:150%;color:red;">&hearts;</span> by Swayam !</p>

@@ -13,9 +13,7 @@ void piping(char *strcomm)
         words[idx] = word;
         word = strtok(NULL, "|");
     }
-
     words[idx] = NULL;
-    free(word);
     int pipearr[2];
     int store = 0;
 
@@ -42,5 +40,6 @@ void piping(char *strcomm)
         close(pipearr[1]);
         store = pipearr[0];
     }
+    free(word);
     free(words);
 }

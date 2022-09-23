@@ -62,7 +62,7 @@ void termcheck()
             {
                 fprintf(stderr, "%s with PID %d exited abnormally\n", strbg[pos], arrbg[pos]);
             }
-            arrbg[pos] = 0;
+            arrbg[pos] = -1;
             free(strbg[pos]);
             return;
         }
@@ -73,8 +73,26 @@ void termcheck()
     }
 }
 
+// int fgRunning = 1;
+
+void controlhandle()
+{
+}
+
 int main()
 {
+    // signal(SIGINT, controlhandle);
+    // signal(SIGTSTP, controlhandle);
+
+    // signal(SIGTSTP, SIG_IGN);
+    // signal(SIGINT, SIG_IGN);
+
+    // uccc!!!1
+    
+    signal(SIGTSTP, SIG_IGN);
+    signal(SIGINT, controlhandle);
+    signal(SIGCHLD, termcheck);
+
     stdinptr = dup(0);
     stdoutptr = dup(1);
     fft = 0;
@@ -102,7 +120,15 @@ int main()
     {
         dup2(stdoutptr, 1);
         dup2(stdinptr, 0);
-        signal(SIGCHLD, termcheck);
+
+        // signal(SIGTSTP, SIG_IGN);
+        // signal(SIGINT, SIG_IGN);
+
+        // signal(SIGTSTP,SIG_IGN);
+        // signal(SIGINT, controlhandle);
+        // signal(SIGCHLD, termcheck);
+
+        // signal(SIGTSTP, controlhandle);
         getcwd(workdirshell, sizeof(workdirshell));
         char *temphomedir = workdirshell;
         if (strcmp(workdirshell, homedir) == 0)
