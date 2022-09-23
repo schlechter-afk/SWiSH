@@ -75,24 +75,12 @@ void termcheck()
 
 // int fgRunning = 1;
 
-void controlhandle()
-{
-}
+// void controlhandle()
+// {
+// }
 
 int main()
 {
-    // signal(SIGINT, controlhandle);
-    // signal(SIGTSTP, controlhandle);
-
-    // signal(SIGTSTP, SIG_IGN);
-    // signal(SIGINT, SIG_IGN);
-
-    // uccc!!!1
-    
-    signal(SIGTSTP, SIG_IGN);
-    signal(SIGINT, controlhandle);
-    signal(SIGCHLD, termcheck);
-
     stdinptr = dup(0);
     stdoutptr = dup(1);
     fft = 0;
@@ -102,6 +90,7 @@ int main()
     for (int i = 1; i < 50; i++)
     {
         arrbg[i] = -1;
+        cpyarrbg[i] = -1;
     }
 
     printf("\e[1;1H\e[2J");
@@ -124,9 +113,9 @@ int main()
         // signal(SIGTSTP, SIG_IGN);
         // signal(SIGINT, SIG_IGN);
 
-        // signal(SIGTSTP,SIG_IGN);
-        // signal(SIGINT, controlhandle);
-        // signal(SIGCHLD, termcheck);
+        signal(SIGTSTP, SIG_IGN);
+        signal(SIGINT, SIG_IGN);
+        signal(SIGCHLD, termcheck);
 
         // signal(SIGTSTP, controlhandle);
         getcwd(workdirshell, sizeof(workdirshell));

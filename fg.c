@@ -12,6 +12,7 @@ int fgproc(char *argumentList[250], int len)
     {
         signal(SIGINT, SIG_DFL);
         signal(SIGTSTP, SIG_DFL);
+        setpgid(0, 0);
         int ret = execvp(argumentList[0], argumentList);
         perror("file nahi hai aisi koi");
         if (ret == -1)
@@ -24,35 +25,41 @@ int fgproc(char *argumentList[250], int len)
     }
     else
     {
-        // signal(SIGTTIN, SIG_IGN);
-        // signal(SIGTTOU, SIG_IGN);
-        // tcsetpgrp(STDIN_FILENO, forkChild);
+        signal(SIGTTIN, SIG_IGN);
+        signal(SIGTTOU, SIG_IGN);
+        tcsetpgrp(STDIN_FILENO, forkChild);
 
         int status;
-        waitpid(forkChild, &status, WUNTRACED | WCONTINUED);
+        waitpid(forkChild, &status, WUNTRACED);
 
-        // tcsetpgrp(STDIN_FILENO, getpgrp());
-        // signal(SIGTTIN, SIG_DFL);
-        // signal(SIGTTOU, SIG_DFL);
+        tcsetpgrp(STDIN_FILENO, getpgrp());
 
-        // if (WIFSTOPPED(status))
-        // {
-        //     printf("Process with id: %d stopped\n", forkChild);
+        signal(SIGTTIN, SIG_DFL);
+        signal(SIGTTOU, SIG_DFL);
 
-        //     // add_process(command, pid);
+        if (WIFSTOPPED(status))
+        {
+            printf("Process with id: %d stopped\n", forkChild);
 
-        //     for (int j = 0; j < 50; j++)
-        //     {
-        //         if (arrbg[j] == -1)
-        //         {
-        //             arrbg[j] = forkChild;
-        //             strbg[j] = malloc(sizeof(char) * 250);
-        //             strcpy(strbg[j], argumentList[0]);
-        //             printf("[%d] %d\n", j, forkChild);
-        //             break;
-        //         }
-        //     }
-        // }
+            // add_process(command, pid);
+
+            for (int j = 0; j < 50; j++)
+            {
+                if (arrbg[j] == -1)
+                {
+                    arrbg[j] = forkChild;
+                    strbg[j] = malloc(sizeof(char) * 250);
+                    strcpy(strbg[j], argumentList[0]);
+
+                    cpyarrbg[j] = forkChild;
+                    cpystrbg[j] = malloc(sizeof(char) * 250);
+                    strcpy(cpystrbg[j], argumentList[0]);
+                    
+                    printf("[%d] %d\n", j, forkChild);
+                    break;
+                }
+            }
+        }
     }
     time_t end = time(NULL);
     time_spent += (double)(end - begin);
@@ -119,6 +126,11 @@ int bgproc(char *argumentList[250], int len)
                 arrbg[j] = ppid;
                 strbg[j] = malloc(sizeof(char) * 250);
                 strcpy(strbg[j], argumentList[0]);
+
+                cpyarrbg[j] = ppid;
+                cpystrbg[j] = malloc(sizeof(char) * 250);
+                strcpy(cpystrbg[j], argumentList[0]);
+
                 printf("[%d] %d\n", j, ppid);
                 break;
             }

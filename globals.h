@@ -14,6 +14,8 @@ int history_count;
 int timetaken;
 int arrbg[250];
 char *strbg[250];
+int cpyarrbg[250];
+char *cpystrbg[250];
 int stdinptr;
 int stdoutptr;
 

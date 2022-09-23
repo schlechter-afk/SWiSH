@@ -29,6 +29,7 @@
 #include "fg.h"
 #include "pipe.h"
 #include "sig.h"
+#include "jobs.h"
 
 #include <time.h>
 

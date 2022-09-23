@@ -241,6 +241,14 @@ void execute(char command[1000])
                 argumentList[i][0] = '\0';
             }
         }
+        else if (strcmp("jobs", argumentList[0]) == 0)
+        {
+            jobs(argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
         else if (strcmp("sig", argumentList[0]) == 0)
         {
             sigfunc(argumentList, len);
