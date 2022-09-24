@@ -92,6 +92,10 @@ int main()
         arrbg[i] = -1;
         cpyarrbg[i] = -1;
     }
+    for (int i = 0; i < 50; i++)
+    {
+        assoc[i] = i;
+    }
 
     printf("\e[1;1H\e[2J");
     red("Welcome to SWiSHell !\n\n");

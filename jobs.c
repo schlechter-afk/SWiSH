@@ -16,27 +16,36 @@ void jobs(char *argumentList[250], int len)
     {
         for (int j = i + 1; j < 50; j++)
         {
-            // printf("%d %d\n", cpyarrbg[i], cpyarrbg[j]);
             if (arrbg[i] != 0 && arrbg[j] != 0 && arrbg[i] != -1 && arrbg[j] != -1 && strcmp(strbg[i], strbg[j]) > 0)
             {
                 char *tempstr = malloc(sizeof(char) * 250);
-                strcpy(tempstr, cpystrbg[j]);
-                strcpy(cpystrbg[j], cpystrbg[i]);
-                strcpy(cpystrbg[i], tempstr);
-                int tempvar = cpyarrbg[j];
-                cpyarrbg[j] = cpyarrbg[i];
-                cpyarrbg[i] = tempvar;
-                // printf("no seg here\n");
+                strcpy(tempstr, strbg[j]);
+                strcpy(strbg[j], strbg[i]);
+                strcpy(strbg[i], tempstr);
+                int tempvar = arrbg[j];
+                arrbg[j] = arrbg[i];
+                arrbg[i] = tempvar;
+                int temp = assoc[i];
+                assoc[i] = assoc[j];
+                assoc[j] = temp;
             }
         }
     }
 
+    int flag = 0;
+    int counter = 0;
+
     for (int j = 1; j < 50; j++)
     {
-        if (cpyarrbg[j] != -1)
+        if (arrbg[j] != -1)
         {
             countproc++;
-            sprintf(ProcFilePath, "/proc/%d/stat", cpyarrbg[countproc]);
+
+            // int val = countproc + counter;
+            // printf("dd %d\n", arrbg[val]);
+
+            sprintf(ProcFilePath, "/proc/%d/stat", arrbg[j]);
+
             FILE *openfile = fopen(ProcFilePath, "r");
             char *content = (char *)malloc(250 * sizeof(char));
             fgets(content, 250, openfile);
@@ -64,20 +73,20 @@ void jobs(char *argumentList[250], int len)
             }
             if (len == 1)
             {
-                printf("[%d] %s %s [%d]\n", countproc, state, cpystrbg[countproc], cpyarrbg[countproc]);
+                printf("[%d] %s %s [%d]\n", assoc[j], state, strbg[j], arrbg[j]);
             }
             else if ((len == 2) && (strcmp(argumentList[1], "-r") == 0))
             {
                 if (state[0] == 'R')
                 {
-                    printf("[%d] %s %s [%d]\n", countproc, state, cpystrbg[countproc], cpyarrbg[countproc]);
+                    printf("[%d] %s %s [%d]\n", assoc[j], state, strbg[j], arrbg[j]);
                 }
             }
             else if ((len == 2) && (strcmp(argumentList[1], "-s") == 0))
             {
                 if (state[0] == 'S')
                 {
-                    printf("[%d] %s %s [%d]\n", countproc, state, cpystrbg[countproc], cpyarrbg[countproc]);
+                    printf("[%d] %s %s [%d]\n", assoc[j], state, strbg[j], arrbg[j]);
                 }
             }
             else
@@ -87,8 +96,12 @@ void jobs(char *argumentList[250], int len)
             }
             free(state);
         }
+        else
+        {
+            flag = 1;
+            counter++;
+        }
     }
-    // printf("survived sort\n");
     free(ProcFilePath);
 }
 

@@ -45,17 +45,17 @@ int fgproc(char *argumentList[250], int len)
 
             for (int j = 0; j < 50; j++)
             {
-                if (arrbg[j] == -1)
+                if (arrbg[assoc[j]] == -1)
                 {
-                    arrbg[j] = forkChild;
-                    strbg[j] = malloc(sizeof(char) * 250);
-                    strcpy(strbg[j], argumentList[0]);
+                    arrbg[assoc[j]] = forkChild;
+                    strbg[assoc[j]] = malloc(sizeof(char) * 250);
+                    strcpy(strbg[assoc[j]], argumentList[0]);
 
                     cpyarrbg[j] = forkChild;
                     cpystrbg[j] = malloc(sizeof(char) * 250);
                     strcpy(cpystrbg[j], argumentList[0]);
-                    
-                    printf("[%d] %d\n", j, forkChild);
+
+                    printf("[%d] %d\n", assoc[j], forkChild);
                     break;
                 }
             }
