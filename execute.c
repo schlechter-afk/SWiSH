@@ -174,6 +174,7 @@ void execute(char command[1000])
             else
             {
                 cdcmd(argumentList, len);
+                // printf("cd executed successfully\n");
             }
             for (int i = 0; i < len; i++)
             {
@@ -244,6 +245,22 @@ void execute(char command[1000])
         else if (strcmp("jobs", argumentList[0]) == 0)
         {
             jobs(argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
+        else if (strcmp("fg", argumentList[0]) == 0)
+        {
+            fgjobsfunc(argumentList, len);
+            for (int i = 0; i < len; i++)
+            {
+                argumentList[i][0] = '\0';
+            }
+        }
+        else if (strcmp("bg", argumentList[0]) == 0)
+        {
+            bgjobsfunc(argumentList, len);
             for (int i = 0; i < len; i++)
             {
                 argumentList[i][0] = '\0';

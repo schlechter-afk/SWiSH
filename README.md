@@ -119,6 +119,9 @@ Whenever history command is called , the latest 10 are printed.When the commmand
 # ***Specification 1: I/O Redirection***
 # ***Specification 2: Command Pipelines***
 # ***Specification 3: I/O Redirection within command pipelines***
+# ***Specification 4: User-defined commands***
+# ***Specification 5: Signal Handling***
+# ***Specification 6: Autocompletion***
 
 
 ```
@@ -127,6 +130,24 @@ Spec 1,2,3 included in execute.c pipe.c
 ```
 File with function to execute piped commands.
 <, >, >> and | will always have their special meanings and will be used correctly. This means that for I/O redirection, a file will always come after the arrow. Similary, a command will always come after a pipe.
+```
+```
+Spec 4,5,6 
+Earlier int main made void mainfunc() and autocomplete main is the now new int main()
+```
+
+```
+For spec-4 Files : jobs.c sig.c fgjobs.c bgjobs.c
+```
+
+```
+For spec-5 Files : All signals handled in fg.c and mainfunc.c
+Assumption : Ctrl-c , ctrl-z wont work after multiple fg jobs call as W_UNTRACED
+```
+
+```
+For spec-6 Files : main.c
+Assumption : For folders , autocomplete works under current directory folders only.
 ```
 
 <p>Made with <span style="font-size:150%;color:red;">&hearts;</span> by Swayam !</p>

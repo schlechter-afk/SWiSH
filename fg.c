@@ -41,8 +41,6 @@ int fgproc(char *argumentList[250], int len)
         {
             printf("Process with id: %d stopped\n", forkChild);
 
-            // add_process(command, pid);
-
             for (int j = 0; j < 50; j++)
             {
                 if (arrbg[assoc[j]] == -1)

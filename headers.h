@@ -15,6 +15,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <assert.h>
+#include <termios.h>
+#include <ctype.h>
 
 #include "cd.h"
 #include "echo.h"
@@ -30,6 +32,9 @@
 #include "pipe.h"
 #include "sig.h"
 #include "jobs.h"
+#include "fgjobs.h"
+#include "bgjobs.h"
+#include "mainfunc.h"
 
 #include <time.h>
 

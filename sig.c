@@ -10,11 +10,11 @@ void sigfunc(char *argumentList[250], int len)
         return;
     }
     int signal = atoi(argumentList[2]);
-    int JobNo = atoi(argumentList[1]);
+    int jobid = atoi(argumentList[1]);
 
     // Invalid for job_no > no of bg proc.
 
-    if (JobNo <= 0)
+    if (jobid <= 0)
     {
         fprintf(stderr, "Invalid Job Number\n");
         return;
@@ -24,5 +24,5 @@ void sigfunc(char *argumentList[250], int len)
         fprintf(stderr, "Invalid Signal Number\n");
         return;
     }
-    int retval = kill(arrbg[JobNo], signal);
+    int retval = kill(arrbg[jobid], signal);
 }
