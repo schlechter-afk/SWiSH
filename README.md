@@ -2,8 +2,7 @@
 
 ```
 Welcome to SWiSH
-Basic Linux Styled C-Shell
-Assignment-3 at end
+A modified Linux Styled C-Shell
 ```
 
 ```
